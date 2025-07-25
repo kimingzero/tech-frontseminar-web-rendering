@@ -1,23 +1,44 @@
-// import { useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import staticData from "../data/staticData";
-import { getKoreanDateTimeString } from "@/app/lib/utils";
+export const revalidate = 10;
 
-export default function ISRPage() {
-    const data = staticData;
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import TimerRevalidateClient from "./TimerRevalidateClient"; // 클라이언트 컴포넌트 import
+import { Button } from "@/components/ui/button";
+import { getKoreanDateTimeString } from "../lib/utils";
+
+function getRandomItems(arr, n) {
+    if (arr.length <= n) return arr;
+    const result = [];
+    const used = new Set();
+    while (result.length < n) {
+        const idx = Math.floor(Math.random() * arr.length);
+        if (!used.has(idx)) {
+            used.add(idx);
+            result.push(arr[idx]);
+        }
+    }
+    return result;
+}
+
+export default async function ISRPage() {
+    const res = await fetch("https://jsonplaceholder.typicode.com/comments", {
+        cache: "force-cache",
+        next: { revalidate: 10 },
+    });
+    const data = await res.json();
+    const random = getRandomItems(data, 5);
     const renderTime = getKoreanDateTimeString();
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-4xl mx-auto">
-                <div className="mb-8">
+                <div className="mb-8 flex justify-between items-center">
                     <Link href="/">
                         <Button variant="ghost">← Back to Home</Button>
                     </Link>
+                    {/* 타이머+버튼은 클라이언트 컴포넌트 */}
+                    <TimerRevalidateClient />
                 </div>
-
                 <div className="space-y-6">
                     <Card>
                         <CardHeader>
@@ -32,7 +53,7 @@ export default function ISRPage() {
                                     {renderTime}
                                 </div>
                                 <div>
-                                    <strong>Revalidation:</strong> Every 60
+                                    <strong>Revalidation:</strong> Every 10
                                     seconds
                                 </div>
                             </div>
@@ -43,20 +64,21 @@ export default function ISRPage() {
                             </p>
                         </CardContent>
                     </Card>
-
-                    <div className="grid gap-4">
-                        {data.map((item) => (
+                    <div className="m-3 mb-5">Random 5개</div>
+                    <div className="grid gap-4 min-h-[150px]">
+                        {random.map((item) => (
                             <Card key={item.id}>
                                 <CardContent className="p-4">
-                                    <h3 className="font-medium">
-                                        {item.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-600 mt-1">
-                                        {item.body || item.description}
-                                    </p>
-                                    <p className="text-xs text-gray-400 mt-2">
-                                        Static content that revalidates
-                                        automatically
+                                    <div className="flex justify-between items-start mb-2">
+                                        <h3 className="font-medium">
+                                            {item.body}
+                                        </h3>
+                                        <span className="text-xs bg-gray-200 px-2 py-1 rounded">
+                                            {item.id}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-gray-600">
+                                        {item.name}
                                     </p>
                                 </CardContent>
                             </Card>
