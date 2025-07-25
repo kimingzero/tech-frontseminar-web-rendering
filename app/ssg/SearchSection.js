@@ -1,14 +1,19 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
+import Input from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getKoreanDateTimeString } from "@/app/lib/utils";
 
-export default async function SSRPage() {
-    const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/dummyData`
+export default function SearchSection({ data, buildTime }) {
+    const [searchTerm, setSearchTerm] = useState("");
+    const filteredData = data.filter(
+        (item) =>
+            item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    const data = await res.json();
-    const renderTime = getKoreanDateTimeString();
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
@@ -22,13 +27,12 @@ export default async function SSRPage() {
                 <div className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Server-Side Rendering (SSR)</CardTitle>
+                            <CardTitle>Static Site Generation (SSG)</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                 <div>
-                                    <strong>Server Render Time:</strong>{" "}
-                                    {renderTime}
+                                    <strong>Built At:</strong> {buildTime}
                                 </div>
                                 <div>
                                     <strong>Current Time:</strong>{" "}
@@ -36,15 +40,26 @@ export default async function SSRPage() {
                                 </div>
                             </div>
                             <p className="text-gray-600">
-                                Content is rendered on the server for each
-                                request. Fresh data every time, but slower
-                                initial load.
+                                Content is pre-rendered at build time. Fastest
+                                loading, but content is static until next build.
                             </p>
                         </CardContent>
                     </Card>
 
+                    <Card>
+                        <CardContent className="p-4">
+                            <Input
+                                type="text"
+                                placeholder="Search topics..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full"
+                            />
+                        </CardContent>
+                    </Card>
+
                     <div className="grid gap-4">
-                        {data.map((item) => (
+                        {filteredData.map((item) => (
                             <Card key={item.id}>
                                 <CardContent className="p-4">
                                     <div className="flex justify-between items-start mb-2">
@@ -62,6 +77,14 @@ export default async function SSRPage() {
                             </Card>
                         ))}
                     </div>
+
+                    {filteredData.length === 0 && (
+                        <div className="text-center py-12">
+                            <p className="text-gray-600">
+                                No topics found matching your search.
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
