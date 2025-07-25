@@ -1,28 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import staticData from "../data/staticData";
-
-// async function getData() {
-//     return Array.from({ length: 20 }, (_, i) => ({
-//         id: i + 1,
-//         title: `SSR Item ${i + 1}`,
-//         description: `This content was fetched on the client at ${new Date().toLocaleTimeString()}`,
-//         timestamp:
-//             new Date().toISOString().split("T")[0] +
-//             " " +
-//             new Date().toLocaleTimeString(),
-//     }));
-// }
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getKoreanDateTimeString } from "@/app/lib/utils";
 
 export default async function SSRPage() {
-    // const data = await getData();
-    const data = staticData;
-    // const renderTime = new Date().toISOString();
-    const renderTime =
-        new Date().toISOString().split("T")[0] +
-        " " +
-        new Date().toLocaleTimeString();
+    const res = await fetch("https://jsonplaceholder.typicode.com/comments");
+
+    const data = await res.json();
+    const renderTime = getKoreanDateTimeString();
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
@@ -46,9 +31,7 @@ export default async function SSRPage() {
                                 </div>
                                 <div>
                                     <strong>Current Time:</strong>{" "}
-                                    {new Date().toISOString().split("T")[0] +
-                                        " " +
-                                        new Date().toLocaleTimeString()}
+                                    {getKoreanDateTimeString()}
                                 </div>
                             </div>
                             <p className="text-gray-600">
@@ -65,14 +48,14 @@ export default async function SSRPage() {
                                 <CardContent className="p-4">
                                     <div className="flex justify-between items-start mb-2">
                                         <h3 className="font-medium">
-                                            {item.title}
+                                            {item.body}
                                         </h3>
                                         <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-                                            {item.category}
+                                            {item.id}
                                         </span>
                                     </div>
                                     <p className="text-sm text-gray-600">
-                                        {item.description}
+                                        {item.name}
                                     </p>
                                 </CardContent>
                             </Card>

@@ -1,11 +1,21 @@
+// import staticData from "@/app/data/staticData";
+// import SearchSection from "./SearchSection";
+
+// export default function SSGPage() {
+//     // 여기서 staticData를 props로 넘겨주기
+//     const buildTime = "2025-07-25 오후 12:00:00";
+//     return <SearchSection data={staticData} buildTime={buildTime} />;
+// }
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import Input from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import staticData from "@/app/data/staticData";
-import Input from "@/components/ui/input";
+import { getKoreanDateTimeString } from "@/app/lib/utils";
 
 export default function SSGPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -13,9 +23,8 @@ export default function SSGPage() {
 
     const filteredData = staticData.filter(
         (item) =>
-            item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.description.toLowerCase().includes(searchTerm.toLowerCase())
+            item.body.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -39,9 +48,7 @@ export default function SSGPage() {
                                 </div>
                                 <div>
                                     <strong>Current Time:</strong>{" "}
-                                    {new Date().toISOString().split("T")[0] +
-                                        " " +
-                                        new Date().toLocaleTimeString()}
+                                    {getKoreanDateTimeString()}
                                 </div>
                             </div>
                             <p className="text-gray-600">
@@ -69,14 +76,14 @@ export default function SSGPage() {
                                 <CardContent className="p-4">
                                     <div className="flex justify-between items-start mb-2">
                                         <h3 className="font-medium">
-                                            {item.title}
+                                            {item.body}
                                         </h3>
                                         <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-                                            {item.category}
+                                            {item.id}
                                         </span>
                                     </div>
                                     <p className="text-sm text-gray-600">
-                                        {item.description}
+                                        {item.name}
                                     </p>
                                 </CardContent>
                             </Card>

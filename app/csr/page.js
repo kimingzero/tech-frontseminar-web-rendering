@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import staticData from "../data/staticData";
+import { getKoreanDateTimeString } from "@/app/lib/utils";
 
 export default function CSRPage() {
     const [data, setData] = useState([]);
@@ -13,19 +13,18 @@ export default function CSRPage() {
     const [currentTime, setCurrentTime] = useState("");
 
     useEffect(() => {
-        const startTime =
-            new Date().toISOString().split("T")[0] +
-            " " +
-            new Date().toLocaleTimeString();
+        const startTime = getKoreanDateTimeString();
         setCurrentTime(startTime);
 
         const fetchData = async () => {
-            await new Promise((resolve) => setTimeout(resolve, 2000)); // 2초 딜레이
-
-            // dummy data 불러오기
-            setData(staticData);
+            const res = await fetch(
+                "https://jsonplaceholder.typicode.com/comments"
+            );
+            const json = await res.json();
+            // 인위적으로 delay 걸기
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setData(json);
             setLoading(false);
-            // setRenderTime(new Date().toISOString());
         };
 
         fetchData();
@@ -34,15 +33,7 @@ export default function CSRPage() {
     useEffect(() => {
         if (!loading) {
             // 데이터 표시 후, 다음 페인트 이후 실행
-            setTimeout(
-                () =>
-                    setRenderTime(
-                        new Date().toISOString().split("T")[0] +
-                            " " +
-                            new Date().toLocaleTimeString()
-                    ),
-                0
-            );
+            setTimeout(() => setRenderTime(getKoreanDateTimeString()), 0);
         }
     }, [loading]);
 
@@ -91,14 +82,14 @@ export default function CSRPage() {
                                     <CardContent className="p-4">
                                         <div className="flex justify-between items-start mb-2">
                                             <h3 className="font-medium">
-                                                {item.title}
+                                                {item.body}
                                             </h3>
                                             <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-                                                {item.category}
+                                                {item.id}
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-600">
-                                            {item.description}
+                                            {item.name}
                                         </p>
                                     </CardContent>
                                 </Card>
