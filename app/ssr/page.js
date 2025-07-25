@@ -1,12 +1,11 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getKoreanDateTimeString } from "@/app/lib/utils";
 
 export default async function SSRPage() {
-    const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/dummyData`
-    );
+    const res = await fetch("https://jsonplaceholder.typicode.com/comments");
+
     const data = await res.json();
     const renderTime = getKoreanDateTimeString();
 
@@ -49,14 +48,14 @@ export default async function SSRPage() {
                                 <CardContent className="p-4">
                                     <div className="flex justify-between items-start mb-2">
                                         <h3 className="font-medium">
-                                            {item.title}
+                                            {item.body}
                                         </h3>
                                         <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-                                            {item.category}
+                                            {item.id}
                                         </span>
                                     </div>
                                     <p className="text-sm text-gray-600">
-                                        {item.description}
+                                        {item.name}
                                     </p>
                                 </CardContent>
                             </Card>

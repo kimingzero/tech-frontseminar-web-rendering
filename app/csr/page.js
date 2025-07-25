@@ -18,7 +18,7 @@ export default function CSRPage() {
 
         const fetchData = async () => {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/dummyData`
+                "https://jsonplaceholder.typicode.com/comments"
             );
             const json = await res.json();
             // 인위적으로 delay 걸기
@@ -82,14 +82,14 @@ export default function CSRPage() {
                                     <CardContent className="p-4">
                                         <div className="flex justify-between items-start mb-2">
                                             <h3 className="font-medium">
-                                                {item.title}
+                                                {item.body}
                                             </h3>
                                             <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-                                                {item.category}
+                                                {item.id}
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-600">
-                                            {item.description}
+                                            {item.name}
                                         </p>
                                     </CardContent>
                                 </Card>
