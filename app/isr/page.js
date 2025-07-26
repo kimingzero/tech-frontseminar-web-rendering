@@ -23,7 +23,7 @@ function getRandomItems(arr, n) {
 export default async function ISRPage() {
     const res = await fetch("https://jsonplaceholder.typicode.com/comments", {
         cache: "force-cache",
-        next: { revalidate: 10 },
+        next: { revalidate: 30 },
     });
     const data = await res.json();
     const random = getRandomItems(data, 5);
@@ -32,11 +32,11 @@ export default async function ISRPage() {
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-4xl mx-auto">
-                <div className="mb-8 flex justify-between items-center">
+                <div className="mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center">
                     <Link href="/">
                         <Button variant="ghost">← Back to Home</Button>
                     </Link>
-                    {/* 타이머+버튼은 클라이언트 컴포넌트 */}
+                    {/* 타이머 클라이언트 컴포넌트 */}
                     <TimerRevalidateClient />
                 </div>
                 <div className="space-y-6">
@@ -53,7 +53,7 @@ export default async function ISRPage() {
                                     {renderTime}
                                 </div>
                                 <div>
-                                    <strong>Revalidation:</strong> Every 10
+                                    <strong>Revalidation:</strong> Every 30
                                     seconds
                                 </div>
                             </div>
@@ -64,7 +64,7 @@ export default async function ISRPage() {
                             </p>
                         </CardContent>
                     </Card>
-                    <div className="m-3 mb-5">Random 5개</div>
+                    <div className="m-3">Random Data</div>
                     <div className="grid gap-4 min-h-[150px]">
                         {random.map((item) => (
                             <Card key={item.id}>

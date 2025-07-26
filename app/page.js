@@ -7,7 +7,7 @@ export default function HomePage() {
             <div className="max-w-md w-full space-y-6">
                 <div className="text-center space-y-2">
                     <h1 className="text-3xl font-bold text-gray-900">
-                        Rendering
+                        Web Rendering Methods
                     </h1>
                     <p className="text-gray-600">Compare CSR, SSR, SSG, ISR</p>
                 </div>
@@ -16,7 +16,7 @@ export default function HomePage() {
                     <Link href="/csr" className="block">
                         <Button
                             variant="outline"
-                            className="w-full h-16 text-lg font-medium bg-transparent"
+                            className="w-full h-16 text-lg font-bold font-medium bg-transparent"
                         >
                             CSR
                             <span className="block text-sm font-normal text-gray-500">

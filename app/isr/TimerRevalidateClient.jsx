@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export default function TimerRevalidateClient() {
-    const [seconds, setSeconds] = useState(10);
+    const [seconds, setSeconds] = useState(30);
 
     // 1초마다 감소
     useEffect(() => {
@@ -16,11 +16,8 @@ export default function TimerRevalidateClient() {
     }, [seconds]);
 
     return (
-        <button
-            onClick={() => window.location.reload()}
-            className="bg-black text-white rounded px-4 py-2 ml-2"
-        >
+        <div className="w-40 bg-black text-white rounded px-4 py-2 ml-2 text-center">
             Revalidate ({seconds})
-        </button>
+        </div>
     );
 }
