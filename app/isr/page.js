@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import TimerRevalidateClient from "./TimerRevalidateClient"; // 클라이언트 컴포넌트 import
 import { Button } from "@/components/ui/button";
 import { getKoreanDateTimeString } from "../lib/utils";
+import ISRSearchClient from "./ISRSearchClient";
 
 function getRandomItems(arr, n) {
     if (arr.length <= n) return arr;
@@ -64,26 +65,7 @@ export default async function ISRPage() {
                             </p>
                         </CardContent>
                     </Card>
-                    <div className="m-3">Random Data</div>
-                    <div className="grid gap-4 min-h-[150px]">
-                        {random.map((item) => (
-                            <Card key={item.id}>
-                                <CardContent className="p-4">
-                                    <div className="flex justify-between items-start mb-2">
-                                        <h3 className="font-medium">
-                                            {item.body}
-                                        </h3>
-                                        <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-                                            {item.id}
-                                        </span>
-                                    </div>
-                                    <p className="text-sm text-gray-600">
-                                        {item.name}
-                                    </p>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+                    <ISRSearchClient items={random} />
                 </div>
             </div>
         </div>
